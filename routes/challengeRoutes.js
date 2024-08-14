@@ -32,8 +32,8 @@ router.post("/:id/enroll", authMiddleware, async (req, res) => {
     if (!challenge)
       return res.status(404).json({ message: "Challenge not found" });
 
-    if (!challenge.usersEnrolled.includes(req.user.id)) {
-      challenge.usersEnrolled.push(req.user.id);
+    if (!challenge.usersEnrolled.includes(req.userId)) {
+      challenge.usersEnrolled.push(req.userId);
       await challenge.save();
     }
     res.json({ message: "Enrolled successfully", challenge });

@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/api/users", userRoutes);
-// Use challenge routes
+// Challenge routes
 app.use("/api/challenges", challengeRoutes);
 
 // MongoDB Connection

@@ -1,17 +1,13 @@
 const mongoose = require("mongoose");
 
-const ProgressSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  date: { type: Date, required: true },
-  completed: { type: Boolean, default: false },
-});
+const Task = require("../models/Task");
 
 const ChallengeSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  duration: { type: Number, required: true }, // duration in days
-  usersEnrolled: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  progress: [ProgressSchema],
+  name: { type: String, required: true },
+  description: { type: String },
+  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }], // Reference to tasks
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
 });
 
 module.exports = mongoose.model("Challenge", ChallengeSchema);

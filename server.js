@@ -12,9 +12,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
-app.use("/api/users", userRoutes);
+app.use("/api/v1/users", userRoutes);
 // Challenge routes
-app.use("/api/challenges", challengeRoutes);
+app.use("/api/v1/challenges", challengeRoutes);
 
 // MongoDB Connection
 mongoose

@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  enrolledChallenges: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "UserChallenge" },
+  ],
 });
 
 userSchema.pre("save", async function (next) {

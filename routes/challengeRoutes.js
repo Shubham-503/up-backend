@@ -144,8 +144,17 @@ router.post(
       // Toggle the task status
       task.isCompleted = !task.isCompleted;
 
+      // Save the changes to the specific UserTask
+      await UserTask.findByIdAndUpdate(task._id, {
+        isCompleted: task.isCompleted,
+      });
+
+      // Find and save the updated UserChallenge
+      userChallenge = await UserChallenge.findById(userChallenge._id).populate(
+        "userTasks"
+      );
       // Save the changes
-      await userChallenge.save();
+      // await userChallenge.save();
 
       res
         .status(200)
@@ -168,37 +177,6 @@ router.get("/:id/progress", authMiddleware, async (req, res) => {
       (p) => p.userId.toString() === req.userId
     );
     res.json(userProgress);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// Update progress for a specific user in a specific challenge
-router.post("/:id/progress", authMiddleware, async (req, res) => {
-  try {
-    const challenge = await Challenge.findById(req.params.id);
-    if (!challenge)
-      return res.status(404).json({ message: "Challenge not found" });
-
-    const { date, completed } = req.body;
-    const existingProgress = challenge.progress.find(
-      (p) =>
-        p.userId.toString() === req.userId &&
-        new Date(p.date).toDateString() === new Date(date).toDateString()
-    );
-
-    if (existingProgress) {
-      existingProgress.completed = completed;
-    } else {
-      challenge.progress.push({
-        userId: req.userId,
-        date: new Date(date),
-        completed: completed,
-      });
-    }
-
-    await challenge.save();
-    res.json({ message: "Progress updated successfully", challenge });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

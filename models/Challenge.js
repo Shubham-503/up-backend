@@ -7,7 +7,7 @@ const ChallengeSchema = new mongoose.Schema({
   description: { type: String },
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }], // Reference to tasks
   startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
+  endDate: { type: Date, required: false },
 });
 
 module.exports = mongoose.model("Challenge", ChallengeSchema);

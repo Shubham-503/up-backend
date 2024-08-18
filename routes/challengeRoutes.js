@@ -5,6 +5,7 @@ const Challenge = require("../models/Challenge");
 const UserChallenge = require("../models/UserChallenge");
 const UserTask = require("../models/UserTask");
 const User = require("../models/User");
+const Task = require("../models/Task");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // Get all challenges
@@ -182,4 +183,43 @@ router.get("/:id/progress", authMiddleware, async (req, res) => {
   }
 });
 
+router.post("/create", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { title, description, tasks, startDate } = req.body;
+    console.log(userId, title, description, tasks, startDate);
+
+    // Prepare the user's tasks with the initial status
+    // const Tasks = challenge.tasks.map((task) => ({
+    //   task: task._id,
+    //   isCompleted: false,
+    // }));
+    const challengeTasksInserted = await Task.insertMany(tasks);
+
+    // Create a new challenge
+    const newChallenge = new Challenge({
+      name: title,
+      description,
+      tasks: challengeTasksInserted,
+      startDate,
+    });
+
+    // Save the new challenge
+    const savedChallenge = await newChallenge.save();
+
+    // Find the user and update their createdChallenges
+    const user = await User.findById(userId);
+    user.createdChallenges.push(savedChallenge._id);
+
+    // Save the user
+    await user.save();
+
+    res.status(201).json({
+      message: "Challenge created successfully",
+      challenge: savedChallenge,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 module.exports = router;

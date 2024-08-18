@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
   enrolledChallenges: [
     { type: mongoose.Schema.Types.ObjectId, ref: "UserChallenge" },
   ],
+  createdChallenges: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Challenge" },
+  ],
 });
 
 userSchema.pre("save", async function (next) {

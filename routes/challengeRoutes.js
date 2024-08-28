@@ -186,8 +186,17 @@ router.get("/:id/progress", authMiddleware, async (req, res) => {
 router.post("/create", authMiddleware, async (req, res) => {
   try {
     const userId = req.userId;
-    const { title, description, tasks, startDate } = req.body;
-    console.log(userId, title, description, tasks, startDate);
+    const { title, description, tasks, startDate, duration, tasksVisibility } =
+      req.body;
+    console.log(
+      userId,
+      title,
+      description,
+      tasks,
+      startDate,
+      duration,
+      tasksVisibility
+    );
 
     // Prepare the user's tasks with the initial status
     // const Tasks = challenge.tasks.map((task) => ({
@@ -202,6 +211,8 @@ router.post("/create", authMiddleware, async (req, res) => {
       description,
       tasks: challengeTasksInserted,
       startDate,
+      duration,
+      tasksVisibility,
     });
 
     // Save the new challenge
